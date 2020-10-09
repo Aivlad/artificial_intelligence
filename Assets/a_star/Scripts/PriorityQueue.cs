@@ -4,7 +4,7 @@ using UnityEngine;
 
 
 /// <summary>
-/// Очередь с приоритетом. Приоритет в порядке возрастания. Значение приоритета выражается в виде F
+/// Очередь с приоритетом в виде линейного списка. Приоритет в порядке возрастания. Значение приоритета выражается в виде F
 /// </summary>
 public class PriorityQueue 
 {
@@ -77,7 +77,7 @@ public class PriorityQueue
     /// <summary>
     /// Получить первый элемент из очереди
     /// </summary>
-    public GameObject GetFirstElement()
+    public GameObject GetPriorityElement()
     {
         QueueElement first = root;
         //очередь пуста
@@ -128,7 +128,7 @@ public class PriorityQueue
         /// Приоритет объекта (выражается  в виде значения F)
         /// </summary>
         /// <value></value>
-        public int priority {get;}
+        public float priority {get;}
 
         /// <summary>
         /// Ссылка на предыдущий элемент
@@ -151,7 +151,7 @@ public class PriorityQueue
         /// <summary>
         /// Получить значение F элемента очереди
         /// </summary>
-        public int GetF()
+        public float GetF()
         {
             return priority;
         }

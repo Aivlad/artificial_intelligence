@@ -16,30 +16,50 @@ public class NodeElement : MonoBehaviour
     /// <summary>
     /// Величина, вычисляемая по формуле: F = H + G
     /// </summary>
-    public int F {get; set;}
+    public float F {get; set;}
     /// <summary>
     /// Примерное количество энергии, затрачиваемое на передвижение от текущей клетки до целевой клетки B
     /// </summary>
-    public int H {get; set;}
+    public float H {get; set;}
     /// <summary>
     /// Энергия, затрачиваемая на передвижение из стартовой клетки A в текущую рассматриваемую клетку, следуя найденному пути к этой клетке
     /// </summary>
-    public int G {get; set;}
+    public float G {get; set;}
     /// <summary>
     /// Ссыдка на родителя
     /// </summary>
     public GameObject parent {get; set;}
 
-    void OnTriggerEnter(Collider colleder)
+    // void OnTriggerEnter(Collider colleder)
+    // {
+    //     LightOnLet();   //красим как препятствие
+    //     isLet = true;
+    // }
+
+    // void OnTriggerExit(Collider collider)
+    // {
+    //     LightOffLet();  //снимаем окраску
+    //     isLet = false;
+    // }
+
+    void OnCollisionEnter(Collision coll)
     {
-        LightOnLet();   //красим как препятствие
-        isLet = true;
+        if (coll.gameObject.tag == "let")
+        {
+            LightOnLet();   //красим как препятствие
+            isLet = true;
+            // coll.gameObject.GetComponent<Rigidbody>().isKinematic = false;   //один из способов убрать отскок
+        }        
     }
 
-    void OnTriggerExit(Collider collider)
+    void OnCollisionExit(Collision coll)
     {
-        LightOffLet();  //снимаем окраску
-        isLet = false;
+        if (coll.gameObject.tag == "let")
+        {
+            LightOffLet();  //снимаем окраску
+            isLet = false;
+            // coll.gameObject.GetComponent<Rigidbody>().isKinematic = true;  //включаем обратно
+        }
     }
 
     /// <summary>
@@ -84,6 +104,6 @@ public class NodeElement : MonoBehaviour
     {
         isLet = false;
         LightOffLet();
-        LightOffVisited();
+        LightOffVisited();    
     }
 }

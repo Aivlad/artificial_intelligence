@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 191306892}
   - component: {fileID: 191306891}
   - component: {fileID: 191306890}
+  - component: {fileID: 191306893}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -204,6 +205,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 55, y: 0, z: 0}
+--- !u!114 &191306893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 191306889}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2416ebc143b568d41ada161b2de5c011, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &425453608
 GameObject:
   m_ObjectHideFlags: 0
@@ -264,16 +277,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be17ae9ba91b4c14fbb93c1841e59238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  createFloor: 0
   prefabFloor: {fileID: 4125464258556997934, guid: 04776429feb0ec84fbf2fcdcb5c2f19a,
     type: 3}
-  sizeFloor: 50
+  sizeFloor: 100
+  createTerrain: 1
+  prefabTerrains:
+  - {fileID: 683020434205268469, guid: 4dfd4872966eb254fa59f298cde597d0, type: 3}
+  - {fileID: 3955689937315408648, guid: 4c158b35c9e2d2245a4778c4e9cdf06d, type: 3}
+  - {fileID: 5967888011504979983, guid: 1595bfdd8feeb594a946229f9420efe9, type: 3}
+  numberTerrain: 2
   prefabLet: {fileID: 3180209470593851202, guid: 45b309954d3d3b0439a9a5a7cc74f985,
     type: 3}
-  mode: 1
+  generationHeightInY: 100
+  vectorsCreateLetOnCall:
+  - {x: 730, y: 100, z: 50}
+  - {x: 730, y: 100, z: 30}
+  - {x: 730, y: 100, z: 10}
+  - {x: 770, y: 100, z: 90}
+  - {x: 790, y: 100, z: 90}
+  - {x: 670, y: 100, z: 70}
+  - {x: 670, y: 100, z: 50}
+  mode: 3
   prefabNode: {fileID: 513897327433739877, guid: 018994a702ca463479324dd4a46d241f,
     type: 3}
   sizeNode: 10
-  firstNodeCoordinates: {x: 10, y: 10, z: 10}
+  firstNodeCoordinates: {x: 10, y: 500, z: 10}
+  heightRatio: 40
 --- !u!4 &500900215
 Transform:
   m_ObjectHideFlags: 0
@@ -302,8 +332,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeStartX: 0
   nodeStartY: 0
-  nodeEndX: 10
-  nodeEndY: 12
+  nodeEndX: 49
+  nodeEndY: 49
 --- !u!1 &2073109121
 GameObject:
   m_ObjectHideFlags: 0

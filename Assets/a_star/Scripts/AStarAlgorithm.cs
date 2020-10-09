@@ -16,10 +16,12 @@ public class AStarAlgorithm : MonoBehaviour
     private bool isReply;
     private GameObject[,] nodes;
     private int countNodes;
+    private int heightRatio;
 
     void Start()
     {
         isReply = true;
+        heightRatio = GameObject.Find("Source").GetComponent<GenerationRules>().heightRatio;
     }
 
     void Update()
@@ -31,6 +33,14 @@ public class AStarAlgorithm : MonoBehaviour
             Action();
             isReply = false;
         }
+    }
+
+    /// <summary>
+    /// Расстояние между узлами
+    /// </summary>
+    public float Dist(GameObject a, GameObject b)
+    {
+        return Vector3.Distance(a.transform.position, b.transform.position) + heightRatio * Mathf.Abs(a.transform.position.y - b.transform.position.y);
     }
 
     /// <summary>
@@ -55,15 +65,15 @@ public class AStarAlgorithm : MonoBehaviour
         }
 
         //открытый список для нодов, ожидающих рассмотрения
-        PriorityQueue openList = new PriorityQueue();
+        var openList = new PriorityQueue();
         //закоытый список для нодов, которые рассмотрели
-        List<GameObject> closedList = new List<GameObject>();
+        var closedList = new List<GameObject>();
 
         //выносим отдельно конечный узел
-        GameObject endNode = GetComponent<GenerationRules>().nodes[nodeEndY, nodeEndX];
+        var endNode = GetComponent<GenerationRules>().nodes[nodeEndY, nodeEndX];
 
         //помечаем стартовый узел
-        GameObject startNode = GetComponent<GenerationRules>().nodes[nodeStartY, nodeStartX];
+        var startNode = GetComponent<GenerationRules>().nodes[nodeStartY, nodeStartX];
         startNode.GetComponent<NodeElement>().LightOnVisited();
         //обнуляеи значения стартового узла
         SetParameters(startNode, 0, 0);
@@ -73,7 +83,7 @@ public class AStarAlgorithm : MonoBehaviour
         while (true)
         {
             //достаем из открытого списка
-            GameObject currentObject = openList.GetFirstElement();
+            var currentObject = openList.GetPriorityElement();
             //кладем в закрытый
             closedList.Add(currentObject);
 
@@ -111,10 +121,12 @@ public class AStarAlgorithm : MonoBehaviour
                         {
                             //если рассматриваемый узел от текущего лежит по диагонале, то коэффициент g = +14 иначе +10
                             var g = currentObject.GetComponent<NodeElement>().G;
-                            if (i == 0 || j == 0) g += 10;
-                            else g += 14;
+                            // if (i == 0 || j == 0) g += 10;
+                            // else g += 14;
+                            g += Dist(currentObject, nodes[indexI + i, indexJ + j]);
                             //h рассчитывается по методом Манхэттена
-                            var h = (Mathf.Abs((indexI + i) - nodeEndY) + Mathf.Abs((indexJ + j) - nodeEndX)) * 10;
+                            // var h = (Mathf.Abs((indexI + i) - nodeEndY) + Mathf.Abs((indexJ + j) - nodeEndX)) * 10;
+                            var h = Dist(currentObject, nodes[nodeEndY, nodeEndX]);
                             //установка параметров
                             SetParameters(nodes[indexI + i, indexJ + j], h, g, currentObject);
                             openList.Add(nodes[indexI + i, indexJ + j]);
@@ -127,8 +139,9 @@ public class AStarAlgorithm : MonoBehaviour
                             var oldG = searchElement.GetComponent<NodeElement>().G;
                             //если рассматриваемый узел от текущего лежит по диагонале, то коэффициент g = +14 иначе +10
                             var newG = currentObject.GetComponent<NodeElement>().G;
-                            if (i == 0 || j == 0) newG += 10;
-                            else newG += 14;
+                            // if (i == 0 || j == 0) newG += 10;
+                            // else newG += 14;
+                            newG += Dist(currentObject, nodes[indexI + i, indexJ + j]);
                             //если новое значение лучше (меньше), то меняем параметры найденного узла, иначе не трогаем ничего
                             if (newG < oldG) SetParameters(searchElement, -1, newG, currentObject);
                         }
@@ -165,7 +178,7 @@ public class AStarAlgorithm : MonoBehaviour
     /// <param name="h">Примерное количество энергии, затрачиваемое на передвижение от текущей клетки до целевой клетки B. Если не требуется менять значение, то отправлять в параметр -1</param>
     /// <param name="g">Энергия, затрачиваемая на передвижение из стартовой клетки A в текущую рассматриваемую клетку, следуя найденному пути к этой клетке</param>
     /// <param name="parent">Родительский узел (тот из которого пришли)</param>
-    private void SetParameters(GameObject node, int h, int g, GameObject parent = null)
+    private void SetParameters(GameObject node, float h, float g, GameObject parent = null)
     {
         if (h != -1) node.GetComponent<NodeElement>().H = h;
         node.GetComponent<NodeElement>().G = g;
